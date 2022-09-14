@@ -4,7 +4,6 @@ import { Routes, Route } from 'react-router-dom';
 import Dim from '~/components/Dim';
 
 import Home from '~/pages/Home';
-import Create from '~/pages/Create';
 import Edit from '~/pages/Edit';
 
 function App() {
@@ -14,7 +13,6 @@ function App() {
          <Routes>
             <Route path="/" element={<Home />}>
                <Route path="car">
-                  <Route index element={<Create />} />
                   <Route path=":id" element={<Edit />} />
                </Route>
             </Route>
