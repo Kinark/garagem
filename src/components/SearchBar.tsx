@@ -34,7 +34,8 @@ const Icon = styled(HiSearch)`
 export const Wrapper = styled(motion.div)`
    position: relative;
    background: ${({ theme }) => theme.card};
-   /* width: 100%; */
+   width: 95%;
+   max-width: 500px;
    border-radius: 100px;
    &::placeholder {
       color: ${({ theme }) => theme.placeholder};
@@ -56,7 +57,7 @@ export const Input = styled.input`
    color: ${({ theme }) => theme.body};
    margin-left: 1rem;
    display: inline-block;
-   width: 500px;
+   width: 100%;
    &:focus {
       /* width: 800px; */
    }

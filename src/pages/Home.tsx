@@ -113,4 +113,5 @@ const CarsContainer = styled.div`
    flex-direction: row;
    gap: 16px;
    flex-wrap: wrap;
+   justify-content: center;
 `;
