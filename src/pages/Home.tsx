@@ -95,6 +95,7 @@ const NewCarButton = styled(motion.button)`
    font-weight: 500;
    cursor: pointer;
    border: none;
+   color: inherit;
 `;
 
 const Container = styled.div`
