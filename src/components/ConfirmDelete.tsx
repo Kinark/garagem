@@ -35,17 +35,17 @@ const ConfirmDelete = ({ onDelete, color, className }: ConfirmDeleteProps) => {
 
    return (
       <Wrapper
-        onMouseLeave={disableAreYouSure}
+         onMouseLeave={disableAreYouSure}
          onClick={areYouSureHandler}
          whileHover={{
             scale: 1.05,
             backgroundColor: areYouSure
                ? darken(0.05, theme.red)
-               : opacify(-0.9, 'black'),
+               : 'rgba(0, 0, 0, 0.1)',
          }}
          animate={{
             width: areYouSure ? '78px' : '24px',
-            backgroundColor: areYouSure ? theme.red : 'transparent',
+            backgroundColor: areYouSure ? theme.red : 'rgba(0, 0, 0, 0)',
             color: areYouSure ? theme.white : color || theme.accent,
          }}
          transition={spring}
@@ -75,8 +75,8 @@ const Wrapper = styled(motion.button)`
    overflow: hidden;
    cursor: pointer;
    svg {
-    display: inline-block;
-    /* margin: auto; */
+      display: inline-block;
+      /* margin: auto; */
       flex-shrink: 0;
    }
 `;
