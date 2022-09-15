@@ -3,18 +3,14 @@ import { motion } from 'framer-motion';
 import { HiSearch } from 'react-icons/hi';
 import { InputHTMLAttributes } from 'react';
 
-const spring = {
-   type: 'spring',
-   stiffness: 700,
-   damping: 30,
-};
+// import { spring } from '~/constants/spring';
 
 interface SearchBar extends InputHTMLAttributes<HTMLInputElement> {}
 
 const SearchBar = ({ placeholder, ...rest }: SearchBar) => {
    const theme = useTheme();
    return (
-      <Wrapper layout transition={spring}>
+      <Wrapper>
          <Icon color={theme.accent} size={24} />
          <Input placeholder={placeholder} {...rest} />
       </Wrapper>

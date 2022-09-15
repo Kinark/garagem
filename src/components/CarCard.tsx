@@ -7,6 +7,7 @@ import { PrimitiveAtom, useAtom } from 'jotai';
 import Lottie from 'lottie-react';
 import { opacify } from 'polished';
 
+import { spring } from '~/constants/spring';
 import keyLottie from '~/assets/key-lottie.json';
 import { Car } from '~/atoms/garagem';
 import GoodLink from '~/components/GoodLink';
@@ -27,18 +28,13 @@ const cardBasePaddingAmount =
 
 // Fake 🥸 custom hook to get animation ids
 export const useAnimationIds = (id: string) => {
-   const transition = {
-      type: 'spring',
-      stiffness: 200,
-      damping: 30,
-   };
    const propsBuilder = (
       layoutId: string,
       layout: LayoutProps['layout'] = true,
    ) => ({
       layout,
       layoutId,
-      transition,
+      transition: spring,
    });
    return {
       card: propsBuilder(`carCard-${id}`),

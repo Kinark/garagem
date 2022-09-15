@@ -4,11 +4,7 @@ import { HiOutlineTrash } from 'react-icons/hi';
 import { motion } from 'framer-motion';
 import { darken, opacify } from 'polished';
 
-const transition = {
-   type: 'spring',
-   stiffness: 200,
-   damping: 30,
-};
+import { spring } from '~/constants/spring';
 
 interface ConfirmDeleteProps {
    onDelete: () => void;
@@ -52,7 +48,7 @@ const ConfirmDelete = ({ onDelete, color, className }: ConfirmDeleteProps) => {
             backgroundColor: areYouSure ? theme.red : 'transparent',
             color: areYouSure ? theme.white : color || theme.accent,
          }}
-         transition={transition}
+         transition={spring}
          className={className}
       >
          <HiOutlineTrash size={16} color="inherit" />

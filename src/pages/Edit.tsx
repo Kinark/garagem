@@ -9,6 +9,7 @@ import { FaHorse } from 'react-icons/fa';
 import { useAtom } from 'jotai';
 import AutoWidthInput from 'react-autowidth-input';
 
+import { spring } from '~/constants/spring';
 import noise from '~/assets/noise';
 import editCar from '~/assets/edit-car.json';
 import yellowTree from '~/assets/yellowTree.svg';
@@ -47,12 +48,6 @@ const Edit = () => {
       background: edit ? 'rgba(0,0,0,0.1)' : 'rgba(0,0,0,0)',
    };
 
-   const inputBgTransition = {
-      type: 'spring',
-      stiffness: 100,
-      damping: 30,
-   };
-
    return (
       <Modal {...animationIds.card}>
          <EditCarWrapper>
@@ -62,7 +57,7 @@ const Edit = () => {
             <YellowTree src={yellowTree} />
             <TitleWrapper>
                <HiStar />
-               <InputBg animate={inputBgAnimate} transition={inputBgTransition}>
+               <InputBg animate={inputBgAnimate} transition={spring}>
                   {edit ? (
                      <InputTitle
                         extraWidth={0}
@@ -85,7 +80,7 @@ const Edit = () => {
                <HiStar />
             </TitleWrapper>
             <Divider />
-            <InputBg animate={inputBgAnimate} transition={inputBgTransition}>
+            <InputBg animate={inputBgAnimate} transition={spring}>
                {edit ? (
                   <InputBrand
                      extraWidth={0}
@@ -103,7 +98,7 @@ const Edit = () => {
             <Power>
                <motion.div
                   animate={{ rotate: edit ? 180 : 0 }}
-                  transition={inputBgTransition}
+                  transition={spring}
                >
                   <FaHorse />
                </motion.div>
@@ -213,7 +208,7 @@ export const Content = styled(motion.div)`
    position: relative;
    z-index: 2;
    flex: 1;
-   padding: 24px 32px;
+   padding: 0px 4px;
    margin: 16px;
    border-radius: 24px;
    display: flex;

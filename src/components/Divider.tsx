@@ -16,7 +16,7 @@ const Wrapper = styled.div`
    display: flex;
    align-items: center;
    justify-content: center;
-   Width: 100%;
+   Width: 70%;
 `;
 
 const Line = styled.div`
