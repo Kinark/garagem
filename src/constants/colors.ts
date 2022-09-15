@@ -6,6 +6,7 @@ export const colors = {
   celadonBlue: '#377CA3',
   magicMint: '#B7FDDA',
   white: '#FFFFFF',
+  red: '#FF0000',
 }
 
 export const palette = {
@@ -16,6 +17,7 @@ export const palette = {
   accent: colors.celadonBlue,
   bg: colors.robRoy,
   white: colors.white,
+  red: colors.red,
 }
 
 export const theme = {

@@ -10,6 +10,7 @@ import { opacify } from 'polished';
 import keyLottie from '~/assets/key-lottie.json';
 import { Car } from '~/atoms/garagem';
 import GoodLink from '~/components/GoodLink';
+import ConfirmDelete from '~/components/ConfirmDelete';
 
 interface CarCardProps {
    carAtom: PrimitiveAtom<Car>;
@@ -101,7 +102,9 @@ const CarCard = ({ carAtom, removeCar }: CarCardProps) => {
                         {car.brand}
                      </motion.span>
                   </Content>
-                  <TrashIcon onClick={removeCar} color={theme.accent} />
+                  <TrashWrapper>
+                     <TrashIcon onDelete={removeCar} />
+                  </TrashWrapper>
                </Wrapper>
             </GoodLink>
          )}
@@ -131,11 +134,14 @@ const iconBase = css`
    transition-delay: 0;
 `;
 
-const TrashIcon = styled(HiOutlineTrash)`
+const TrashWrapper = styled.div`
    ${iconBase};
-   bottom: 17px;
+   width: min-content;
+   bottom: 12px;
    transform: translateY(-13px);
 `;
+
+const TrashIcon = styled(ConfirmDelete)``;
 
 const KeyWrapper = styled.div`
    ${iconBase};
@@ -230,12 +236,12 @@ export const Wrapper = styled(motion.div)`
    &:hover {
       border: solid 1.5px ${({ theme }) => opacify(-0.7, theme.white)};
       box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
-      ${TrashIcon}, ${KeyWrapper} {
+      ${TrashWrapper}, ${KeyWrapper} {
          transform: translateY(0);
          opacity: 1;
          transition-delay: 0.2s;
       }
-      ${TrashIcon} {
+      ${TrashWrapper} {
          transition-duration: 0.2s 0.5s;
       }
       ${KeyWrapper} {
