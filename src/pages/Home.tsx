@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { atom, useAtom } from 'jotai';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { LayoutGroup, motion } from 'framer-motion';
 
 import { carsAtoms, createCarObj } from '~/atoms/garagem';
 
@@ -59,18 +59,20 @@ const Home = () => {
                placeholder="Which car do you wanna search for?"
             />
             <CarsContainer>
-               {filteredCars?.map((carAtom) => (
-                  <CarCard
-                     key={`${carAtom}`}
-                     carAtom={carAtom}
-                     removeCar={() =>
-                        dispatch({ type: 'remove', atom: carAtom })
-                     }
-                  />
-               ))}
-               <NewCarButton whileTap={{ scale: 0.95 }} onClick={newCar}>
-                  Add
-               </NewCarButton>
+               <LayoutGroup>
+                  {filteredCars?.map((carAtom) => (
+                     <CarCard
+                        key={`${carAtom}`}
+                        carAtom={carAtom}
+                        removeCar={() =>
+                           dispatch({ type: 'remove', atom: carAtom })
+                        }
+                     />
+                  ))}
+                  <NewCarButton whileTap={{ scale: 0.95 }} onClick={newCar}>
+                     Add
+                  </NewCarButton>
+               </LayoutGroup>
             </CarsContainer>
          </Container>
          <Outlet />
