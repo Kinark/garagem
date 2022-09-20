@@ -45,7 +45,6 @@ const Edit = () => {
          </EditCarWrapper>
          <Content {...animationIds.content}>
             <YellowTree src={yellowTree} />
-            <LightTree id="tree" src={lightTree} />
             <TitleWrapper>
                <HiStar />
                <Title
@@ -55,6 +54,7 @@ const Edit = () => {
                   tag="h2"
                   previewProps={animationIds.model}
                />
+               <LightTree id="tree" src={lightTree} />
                <HiStar />
             </TitleWrapper>
             <Divider />
@@ -197,6 +197,9 @@ const Title = styled(DisguisedInput)`
    font-size: ${({ theme }) => theme.font.sizes.title};
    font-family: ${({ theme }) => theme.font.families.serif};
    font-weight: 700;
+   &:hover ~ #tree {
+      opacity: 0.5;
+   }
 `;
 
 const Brand = styled(DisguisedInput)`

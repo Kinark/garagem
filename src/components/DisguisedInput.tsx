@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useRef, useState, useEffect, InputHTMLAttributes } from 'react';
 import styled, { css } from 'styled-components';
+import { useTimeoutWhen } from "rooks";
 
 interface DisguisedInputProps extends InputHTMLAttributes<HTMLInputElement> {
    edit: boolean;
@@ -21,6 +22,7 @@ const DisguisedInput = ({
 }: DisguisedInputProps) => {
    const [width, setWidth] = useState(0);
    const valueRef = useRef<HTMLDivElement>(null);
+   const wrapperRef = useRef<HTMLDivElement>(null);
 
    const updateWidth = () => {
       if (!valueRef.current) return;
@@ -28,6 +30,7 @@ const DisguisedInput = ({
    };
 
    useEffect(updateWidth, [value]);
+
    useEffect(() => {
       window.addEventListener('load', updateWidth);
       return () => {
@@ -35,8 +38,10 @@ const DisguisedInput = ({
       };
    }, []);
 
+   useTimeoutWhen(updateWidth, 350, !!width);
+
    return (
-      <Wrapper className={className}>
+      <Wrapper ref={wrapperRef} className={className}>
          <InputBg
             animate={{
                margin: edit ? '-4px -8px' : '0px 0px',
@@ -89,6 +94,7 @@ const Input = styled.input`
    border: none;
    font: inherit !important;
    color: inherit !important;
+   line-height: inherit !important;;
    padding: 0;
    margin: 0;
    box-sizing: border-box;
