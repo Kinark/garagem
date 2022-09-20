@@ -1,20 +1,32 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { atom, useAtom } from 'jotai';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { LayoutGroup, motion } from 'framer-motion';
+import { useTimeoutWhen } from 'rooks';
 
 import { carsAtoms, createCarObj } from '~/atoms/garagem';
 
 import logo from '~/assets/GaragemLogo.svg';
 
 import SearchBar from '~/components/SearchBar';
-import CarCard, { CARDS_BASE_HEIGHT, CARDS_RADIUS } from '~/components/CarCard';
+import CarCard, {
+   useAnimationIds,
+   CARDS_BASE_HEIGHT,
+   CARDS_RADIUS,
+} from '~/components/CarCard';
 
 const Home = () => {
    const [cars, dispatch] = useAtom(carsAtoms);
+   const location = useLocation();
    const [query, setQuery] = useState('');
+   const [currentNewCar, setCurrentNewCar] = useState(createCarObj());
+   const [hideAddBtn, setHideAddBtn] = useState(false);
    const navigate = useNavigate();
+
+   const refreshCurrentNewCar = () => {
+      setCurrentNewCar(createCarObj());
+   };
 
    const filteredCarsAtom = useMemo(
       () =>
@@ -36,17 +48,25 @@ const Home = () => {
 
    const [filteredCars] = useAtom(filteredCarsAtom);
 
+   const shareIds = useMemo(
+      () => useAnimationIds(currentNewCar.id),
+      [currentNewCar],
+   );
+
+   useTimeoutWhen(
+      () => setHideAddBtn(false),
+      50,
+      hideAddBtn && location.pathname === '/',
+   );
+
    const newCar = () => {
-      const newCar = createCarObj({
-         brand: 'Fiat',
-         model: 'Uno',
-         power: 200,
-      });
       dispatch({
          type: 'insert',
-         value: newCar,
+         value: currentNewCar,
       });
-      navigate(`/car/${newCar.id}`);
+      navigate(`/car/${currentNewCar.id}`);
+      setHideAddBtn(true);
+      refreshCurrentNewCar();
    };
 
    return (
@@ -69,9 +89,18 @@ const Home = () => {
                         }
                      />
                   ))}
-                  <NewCarButton whileTap={{ scale: 0.95 }} onClick={newCar}>
-                     Add
-                  </NewCarButton>
+                  {!hideAddBtn && (
+                     <NewCarButton
+                        {...shareIds.card}
+                        initial={{ opacity: 0, scale: 0.6 }}
+                        animate={{ opacity: 1, scale: 0.9 }}
+                        whileTap={{ scale: 1.05 }}
+                        whileHover={{ scale: 0.95 }}
+                        onClick={newCar}
+                     >
+                        Add
+                     </NewCarButton>
+                  )}
                </LayoutGroup>
             </CarsContainer>
          </Container>
@@ -111,7 +140,7 @@ const Container = styled.div`
    margin: auto;
 `;
 
-const CarsContainer = styled.div`
+const CarsContainer = styled(motion.div)`
    display: flex;
    flex-direction: row;
    gap: 16px;

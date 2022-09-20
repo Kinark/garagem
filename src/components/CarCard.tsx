@@ -50,7 +50,7 @@ const CarCard = ({ carAtom, removeCar }: CarCardProps) => {
    const [car] = useAtom(carAtom);
    const width = useRef(0);
    const cardRef = useRef<HTMLDivElement>(null);
-   const animationIds = useAnimationIds(car.id, location.pathname);
+   const animationIds = useAnimationIds(car.id);
 
    const updateWidth = () => {
       if (!cardRef.current) return;
@@ -71,7 +71,7 @@ const CarCard = ({ carAtom, removeCar }: CarCardProps) => {
    }, [hide]);
 
    return (
-      <PlaceHolder style={{ width: hide ? width.current : 'auto' }}>
+      <PlaceHolder key={car.id} style={{ width: hide ? width.current : 'auto' }}>
          {!hide && (
             <GoodLink to={`/car/${car.id}`}>
                <Wrapper

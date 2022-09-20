@@ -72,10 +72,14 @@ export const useCarAtom = (id: string) => {
 export const selectedCarAtom = atom<Car | null>(null);
 
 // This is a simple car object creator
-export const createCarObj = (car: Omit<Car, 'id'>) => {
+export const createCarObj = (car?: Omit<Car, 'id'>) => {
    const id = nanoid();
    return {
       id,
-      ...car,
+      ...(car || {
+         brand: 'New Car',
+         model: 'Model',
+         power: 200,
+      }),
    };
 };
