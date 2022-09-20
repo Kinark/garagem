@@ -71,7 +71,10 @@ const CarCard = ({ carAtom, removeCar }: CarCardProps) => {
    }, [hide]);
 
    return (
-      <PlaceHolder key={car.id} style={{ width: hide ? width.current : 'auto' }}>
+      <PlaceHolder
+         key={car.id}
+         style={{ width: hide ? width.current : 'auto' }}
+      >
          {!hide && (
             <GoodLink to={`/car/${car.id}`}>
                <Wrapper
@@ -81,6 +84,10 @@ const CarCard = ({ carAtom, removeCar }: CarCardProps) => {
                      scale: 1.05,
                   }}
                   whileTap={{ scale: 0.95 }}
+                  exit={{
+                     scale: 0.8,
+                     opacity: 0,
+                  }}
                   style={{
                      paddingTop: `${cardBasePaddingAmount}px`,
                      paddingBottom: `${cardBasePaddingAmount}px`,

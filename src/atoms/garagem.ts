@@ -77,8 +77,8 @@ export const createCarObj = (car?: Omit<Car, 'id'>) => {
    return {
       id,
       ...(car || {
-         brand: 'New Car',
-         model: 'Model',
+         brand: 'Bran',
+         model: 'New Car',
          power: 200,
       }),
    };

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { atom, useAtom } from 'jotai';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutGroup, motion } from 'framer-motion';
+import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
 import { useTimeoutWhen } from 'rooks';
 
 import { carsAtoms, createCarObj } from '~/atoms/garagem';
@@ -80,15 +80,17 @@ const Home = () => {
             />
             <CarsContainer>
                <LayoutGroup>
-                  {filteredCars?.map((carAtom) => (
-                     <CarCard
-                        key={`${carAtom}`}
-                        carAtom={carAtom}
-                        removeCar={() =>
-                           dispatch({ type: 'remove', atom: carAtom })
-                        }
-                     />
-                  ))}
+                  <AnimatePresence>
+                     {filteredCars?.map((carAtom) => (
+                        <CarCard
+                           key={`${carAtom}`}
+                           carAtom={carAtom}
+                           removeCar={() =>
+                              dispatch({ type: 'remove', atom: carAtom })
+                           }
+                        />
+                     ))}
+                  </AnimatePresence>
                   {!hideAddBtn && (
                      <NewCarButton
                         {...shareIds.card}
@@ -98,7 +100,7 @@ const Home = () => {
                         whileHover={{ scale: 0.95 }}
                         onClick={newCar}
                      >
-                        Add
+                        <motion.span {...shareIds.model}>New Car</motion.span>
                      </NewCarButton>
                   )}
                </LayoutGroup>
