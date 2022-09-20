@@ -3,15 +3,13 @@ import { motion } from 'framer-motion';
 import { HiSearch } from 'react-icons/hi';
 import { InputHTMLAttributes } from 'react';
 
-// import { spring } from '~/constants/spring';
-
 interface SearchBar extends InputHTMLAttributes<HTMLInputElement> {}
 
 const SearchBar = ({ placeholder, ...rest }: SearchBar) => {
    const theme = useTheme();
    return (
       <Wrapper>
-         <Icon color={theme.accent} size={24} />
+         <Icon color={theme.colors.accent} size={24} />
          <Input placeholder={placeholder} {...rest} />
       </Wrapper>
    );
@@ -29,12 +27,12 @@ const Icon = styled(HiSearch)`
 
 export const Wrapper = styled(motion.div)`
    position: relative;
-   background: ${({ theme }) => theme.card};
+   background: ${({ theme }) => theme.colors.card};
    width: 95%;
    max-width: 500px;
    border-radius: 100px;
    &::placeholder {
-      color: ${({ theme }) => theme.placeholder};
+      color: ${({ theme }) => theme.colors.placeholder};
       opacity: 0.5;
    }
 `;
@@ -46,11 +44,11 @@ export const Input = styled.input`
    background: none;
    margin: 0 1rem;
    padding: 10px 0;
-   font-size: 16px;
-   font-family: Recoleta;
+   font-size: ${({ theme }) => theme.font.sizes.body};
+   font-family: ${({ theme }) => theme.font.families.serif};
    font-size: 1.2rem;
    font-weight: 500;
-   color: ${({ theme }) => theme.body};
+   color: ${({ theme }) => theme.colors.body};
    margin-left: 1rem;
    display: inline-block;
    width: 100%;
@@ -58,7 +56,7 @@ export const Input = styled.input`
       /* width: 800px; */
    }
    &::placeholder {
-      color: ${({ theme }) => theme.placeholder};
+      color: ${({ theme }) => theme.colors.placeholder};
       opacity: 0.5;
    }
 `;

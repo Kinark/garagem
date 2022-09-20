@@ -22,7 +22,7 @@ const Wrapper = styled.div`
 const Line = styled.div`
    height: 1px;
    width: 100%;
-   background: ${({ theme }) => theme.body};
+   background: ${({ theme }) => theme.colors.body};
 `;
 
 const Circle = styled.div`
@@ -30,6 +30,6 @@ const Circle = styled.div`
    width: 5px;
    border-radius: 50%;
    flex-shrink: 0;
-   background: ${({ theme }) => theme.body};
+   background: ${({ theme }) => theme.colors.body};
    margin: 0 5px;
 `;

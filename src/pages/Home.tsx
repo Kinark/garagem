@@ -90,7 +90,7 @@ const NewCarButton = styled(motion.button)`
    display: flex;
    align-items: center;
    justify-content: center;
-   font-family: Recoleta;
+   font-family: ${({ theme }) => theme.font.families.serif};
    font-size: 18px;
    font-weight: 500;
    cursor: pointer;

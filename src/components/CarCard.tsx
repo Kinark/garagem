@@ -1,14 +1,12 @@
 import { useRef, useEffect } from 'react';
-import styled, { css, useTheme } from 'styled-components';
+import styled, { css, DefaultTheme, useTheme } from 'styled-components';
 import { useLocation } from 'react-router-dom';
 import { motion, LayoutProps } from 'framer-motion';
-import { HiOutlineTrash } from 'react-icons/hi';
 import { PrimitiveAtom, useAtom } from 'jotai';
 import Lottie from 'lottie-react';
 import { opacify } from 'polished';
 
-import { spring } from '~/constants/spring';
-import keyLottie from '~/assets/key-lottie.json';
+import keyLottie from '~/assets/lottie/key-lottie.json';
 import { Car } from '~/atoms/garagem';
 import GoodLink from '~/components/GoodLink';
 import ConfirmDelete from '~/components/ConfirmDelete';
@@ -27,14 +25,16 @@ const cardBasePaddingAmount =
    (CARDS_BASE_HEIGHT - TITLE_LINE_HEIGHT - BRAND_LINE_HEIGHT) / 2;
 
 // Fake 🥸 custom hook to get animation ids
-export const useAnimationIds = (id: string) => {
+export const useAnimationIds = (id: string, layoutDependency?: any) => {
+   // const theme = useTheme();
    const propsBuilder = (
       layoutId: string,
       layout: LayoutProps['layout'] = true,
    ) => ({
       layout,
       layoutId,
-      transition: spring,
+      // transition: theme.animation.springs.default,
+      layoutDependency,
    });
    return {
       card: propsBuilder(`carCard-${id}`),
@@ -48,10 +48,9 @@ export const useAnimationIds = (id: string) => {
 const CarCard = ({ carAtom, removeCar }: CarCardProps) => {
    const location = useLocation();
    const [car] = useAtom(carAtom);
-   const theme = useTheme();
    const width = useRef(0);
    const cardRef = useRef<HTMLDivElement>(null);
-   const animationIds = useAnimationIds(car.id);
+   const animationIds = useAnimationIds(car.id, location.pathname);
 
    const updateWidth = () => {
       if (!cardRef.current) return;
@@ -158,7 +157,7 @@ const KeyWrapper = styled.div`
       border-radius: 50%;
       transform: scale(0);
       opacity: 0.5;
-      background: ${({ theme }) => theme.bg};
+      background: ${({ theme }) => theme.colors.bg};
       transition-property: transform;
       transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
       transition-duration: 0.2s;
@@ -179,17 +178,17 @@ export const Content = styled(motion.div)`
    border-radius: 24px;
    h2 {
       margin: 0;
-      color: ${({ theme }) => theme.body};
-      font-size: 24px;
+      color: ${({ theme }) => theme.colors.body};
+      font-size: ${({ theme }) => theme.font.sizes.smallTitle};
       line-height: ${TITLE_LINE_HEIGHT}px;
-      font-family: Recoleta;
+      font-family: ${({ theme }) => theme.font.families.serif};
    }
    span {
       display: block;
-      font-family: ApercuPro, sans-serif;
+      font-family: ${({ theme }) => theme.font.families.sans};
       font-weight: 500;
       line-height: ${BRAND_LINE_HEIGHT}px;
-      color: ${({ theme }) => theme.secondary};
+      color: ${({ theme }) => theme.colors.secondary};
    }
 `;
 
@@ -200,7 +199,7 @@ export const Wrapper = styled(motion.div)`
       -webkit-user-drag: none;
    }
    border-radius: ${CARDS_RADIUS}px;
-   background: ${({ theme }) => theme.card};
+   background: ${({ theme }) => theme.colors.card};
    padding-left: 48px;
    padding-right: 48px;
    box-shadow: rgba(17, 12, 46, 0) 0px 0px 0px 0px;
@@ -208,7 +207,7 @@ export const Wrapper = styled(motion.div)`
    position: relative;
    transition: box-shadow 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
    overflow: hidden;
-   border: solid 1.5px ${({ theme }) => opacify(-1, theme.white)};
+   border: solid 1.5px ${({ theme }) => opacify(-1, theme.colors.white)};
    &::before {
       background: linear-gradient(
          0deg,
@@ -230,7 +229,7 @@ export const Wrapper = styled(motion.div)`
       transition-delay: 0;
    }
    &:hover {
-      border: solid 1.5px ${({ theme }) => opacify(-0.7, theme.white)};
+      border: solid 1.5px ${({ theme }) => opacify(-0.7, theme.colors.white)};
       box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
       ${TrashWrapper}, ${KeyWrapper} {
          transform: translateY(0);
@@ -260,11 +259,11 @@ export const Input = styled.input`
    background: none;
    margin: 0 1rem;
    padding: 10px 0;
-   font-size: 16px;
-   font-family: Recoleta;
+   font-size: ${({ theme }) => theme.font.sizes.body};
+   font-family: ${({ theme }) => theme.font.families.serif};
    font-size: 1.2rem;
    font-weight: 500;
-   color: ${({ theme }) => theme.body};
+   color: ${({ theme }) => theme.colors.body};
    margin-left: 1rem;
    display: inline-block;
    width: 500px;
@@ -272,7 +271,7 @@ export const Input = styled.input`
       /* width: 800px; */
    }
    &::placeholder {
-      color: ${({ theme }) => theme.placeholder};
+      color: ${({ theme }) => theme.colors.placeholder};
       opacity: 0.5;
    }
 `;

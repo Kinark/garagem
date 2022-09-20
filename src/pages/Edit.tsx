@@ -7,17 +7,16 @@ import { opacify } from 'polished';
 import { HiStar } from 'react-icons/hi';
 import { FaHorse } from 'react-icons/fa';
 import { useAtom } from 'jotai';
-import AutoWidthInput from 'react-autowidth-input';
 
-import { spring } from '~/constants/spring';
 import noise from '~/assets/noise';
-import editCar from '~/assets/edit-car.json';
+import editCar from '~/assets/lottie/edit-car.json';
 import yellowTree from '~/assets/yellowTree.svg';
 import lightTree from '~/assets/lightTree.svg';
 import { useCarAtom } from '~/atoms/garagem';
 import { dimUrlAtom } from '~/atoms/dimUrlAtom';
 import { useAnimationIds } from '~/components/CarCard';
 import Divider from '~/components/Divider';
+import DisguisedInput from '~/components/DisguisedInput';
 
 const Edit = () => {
    const [edit, setEdit] = useState(false);
@@ -30,23 +29,14 @@ const Edit = () => {
 
    if (!car) return <Navigate to="/" />;
 
-   const animationIds = useAnimationIds(car.id);
+   const animationIds = useAnimationIds(car.id, id);
 
    useEffect(() => {
       setDimUrl('/');
+      return () => {
+         setDimUrl(null);
+      };
    }, []);
-
-   const inputBgAnimate = {
-      paddingTop: edit ? '4px' : '0px',
-      paddingLeft: edit ? '8px' : '0px',
-      paddingRight: edit ? '8px' : '0px',
-      paddingBottom: edit ? '4px' : '0px',
-      marginTop: edit ? '-4px' : '0px',
-      marginLeft: edit ? '-8px' : '0px',
-      marginRight: edit ? '-8px' : '0px',
-      marginBottom: edit ? '-4px' : '0px',
-      background: edit ? 'rgba(0,0,0,0.1)' : 'rgba(0,0,0,0)',
-   };
 
    return (
       <Modal {...animationIds.card}>
@@ -55,71 +45,38 @@ const Edit = () => {
          </EditCarWrapper>
          <Content {...animationIds.content}>
             <YellowTree src={yellowTree} />
+            <LightTree id="tree" src={lightTree} />
             <TitleWrapper>
                <HiStar />
-               <InputBg animate={inputBgAnimate} transition={spring}>
-                  {edit ? (
-                     <InputTitle
-                        extraWidth={0}
-                        minWidth={15}
-                        value={car.model}
-                        onChange={(e) =>
-                           setCar({ ...car, model: e.target.value })
-                        }
-                        wrapperStyle={{
-                           fontSize: 0,
-                        }}
-                        {...animationIds.model}
-                     />
-                  ) : (
-                     <Title {...animationIds.model}>{car.model}</Title>
-                  )}
-               </InputBg>
-
-               <LightTree id="tree" src={lightTree} />
+               <Title
+                  onChange={(e) => setCar({ ...car, model: e.target.value })}
+                  value={car.model}
+                  edit={edit}
+                  tag="h2"
+                  previewProps={animationIds.model}
+               />
                <HiStar />
             </TitleWrapper>
             <Divider />
-            <InputBg animate={inputBgAnimate} transition={spring}>
-               {edit ? (
-                  <InputBrand
-                     extraWidth={0}
-                     minWidth={15}
-                     value={car.brand}
-                     onChange={(e) => setCar({ ...car, brand: e.target.value })}
-                     wrapperStyle={{
-                        fontSize: 0,
-                     }}
-                  />
-               ) : (
-                  <Brand {...animationIds.brand}>{car.brand}</Brand>
-               )}
-            </InputBg>
-            <Power>
-               <motion.div
-                  animate={{ rotate: edit ? 180 : 0 }}
-                  transition={spring}
-               >
+            <Brand
+               edit={edit}
+               value={car.brand}
+               onChange={(e) => setCar({ ...car, brand: e.target.value })}
+               previewProps={animationIds.brand}
+            />
+            <PowerWrapper>
+               <motion.div animate={{ rotate: edit ? 180 : 0 }}>
                   <FaHorse />
                </motion.div>
-               {edit ? (
-                  <InputPower
-                     extraWidth={0}
-                     minWidth={15}
-                     type="number"
-                     value={car.power}
-                     onChange={(e) =>
-                        setCar({ ...car, power: Number(e.target.value) })
-                     }
-                     wrapperStyle={{
-                        fontSize: 0,
-                        height: 19,
-                     }}
-                  />
-               ) : (
-                  car.power
-               )}
-            </Power>
+               <Power
+                  edit={edit}
+                  type="number"
+                  value={car.power}
+                  onChange={(e) =>
+                     setCar({ ...car, power: Number(e.target.value) })
+                  }
+               />
+            </PowerWrapper>
             <EditButton onClick={() => setEdit((x) => !x)}>
                {edit ? 'Done' : 'Edit'}
             </EditButton>
@@ -138,15 +95,15 @@ const EditButton = styled(motion.button)`
    right: 0;
    left: 0;
    margin: 0 auto;
-   background-color: ${({ theme }) => theme.body};
-   color: ${({ theme }) => theme.bg};
+   background-color: ${({ theme }) => theme.colors.body};
+   color: ${({ theme }) => theme.colors.bg};
    padding: 8px 24px;
    border-radius: 100px;
-   font-size: 14px;
+   font-size: ${({ theme }) => theme.font.sizes.small};
    font-weight: 500;
    text-transform: uppercase;
    z-index: 4;
-   font-family: Recoleta;
+   font-family: ${({ theme }) => theme.font.families.serif};
    cursor: pointer;
 `;
 
@@ -174,12 +131,12 @@ const Modal = styled(motion.div)`
    bottom: 0;
    margin: auto;
    overflow: hidden;
-   background: ${({ theme }) => theme.card};
-   color: ${({ theme }) => theme.body};
+   background: ${({ theme }) => theme.colors.card};
+   color: ${({ theme }) => theme.colors.body};
    box-shadow: rgba(0, 0, 0, 0.15) 0px 48px 50px 0px;
    display: flex;
    *::selection {
-      background-color: ${({ theme }) => opacify(-0.5, theme.white)};
+      background-color: ${({ theme }) => opacify(-0.5, theme.colors.white)};
    }
 `;
 
@@ -216,7 +173,7 @@ export const Content = styled(motion.div)`
    justify-content: center;
    align-items: center;
    gap: 8px;
-   background: ${({ theme }) => opacify(-0.9, theme.accent)};
+   background: ${({ theme }) => opacify(-0.9, theme.colors.accent)};
    background-image: url(${noise});
 `;
 
@@ -224,83 +181,41 @@ const TitleWrapper = styled(motion.div)`
    display: flex;
    align-items: center;
    gap: 4px;
-   color: ${({ theme }) => theme.body};
+   color: ${({ theme }) => theme.colors.body};
 `;
 
-const titleStyles = css`
+const Power = styled(DisguisedInput)`
+   font-family: ${({ theme }) => theme.font.families.sans};
+   font-weight: 500;
+   font-size: ${({ theme }) => theme.font.sizes.body};
+   line-height: 19px;
+`;
+
+const Title = styled(DisguisedInput)`
+   margin: 0;
    line-height: 32px;
-   font-size: 32px;
-   font-family: Recoleta;
+   font-size: ${({ theme }) => theme.font.sizes.title};
+   font-family: ${({ theme }) => theme.font.families.serif};
    font-weight: 700;
 `;
 
-const powerStyles = css`
-   font-family: ApercuPro, sans-serif;
+const Brand = styled(DisguisedInput)`
+   font-family: ${({ theme }) => theme.font.families.sans};
    font-weight: 500;
-   font-size: 16px;
-   line-height: 19px;
-   color: ${({ theme }) => theme.bg};
-`;
-
-const brandStyles = css`
-   font-family: ApercuPro, sans-serif;
-   font-weight: 500;
-   font-size: 24px;
+   font-size: ${({ theme }) => theme.font.sizes.smallTitle};
    line-height: 24px;
-   color: ${({ theme }) => theme.body};
+   color: ${({ theme }) => theme.colors.body};
 `;
 
-const autoInputStyles = css`
-   width: min-content;
-   outline: none;
-   background: transparent;
-   border: none;
-   color: inherit;
-   padding: 0;
-   box-sizing: border-box;
-`;
-
-const InputBg = styled(motion.div)`
-   border-radius: 8px;
-   font-size: 0;
-   &:hover ~ #tree {
-      opacity: 0.5;
-   }
-`;
-
-const InputTitle = styled(AutoWidthInput)`
-   ${autoInputStyles};
-   ${titleStyles};
-   height: 32px;
-`;
-
-const InputBrand = styled(AutoWidthInput)`
-   ${autoInputStyles};
-   ${brandStyles};
-   height: 24px !important;
-`;
-
-const InputPower = styled(AutoWidthInput)`
-   ${autoInputStyles};
-   ${powerStyles};
-   height: 19px !important;
-`;
-
-const Title = styled(motion.h2)`
-   margin: 0;
-   ${titleStyles};
-`;
-
-const Brand = styled(motion.div)`
-   ${brandStyles};
-`;
-
-const Power = styled.div`
-   ${powerStyles};
-   background: ${({ theme }) => theme.body};
+const PowerWrapper = styled.div`
+   color: ${({ theme }) => theme.colors.bg};
+   background: ${({ theme }) => theme.colors.body};
    padding: 4px 8px;
    border-radius: 8px;
    display: flex;
    align-items: center;
    gap: 4px;
+   & > div {
+      display: flex;
+   }
 `;

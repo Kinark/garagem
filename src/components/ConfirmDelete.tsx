@@ -2,9 +2,7 @@ import { useState } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { HiOutlineTrash } from 'react-icons/hi';
 import { motion } from 'framer-motion';
-import { darken, opacify } from 'polished';
-
-import { spring } from '~/constants/spring';
+import { darken } from 'polished';
 
 interface ConfirmDeleteProps {
    onDelete: () => void;
@@ -38,17 +36,15 @@ const ConfirmDelete = ({ onDelete, color, className }: ConfirmDeleteProps) => {
          onMouseLeave={disableAreYouSure}
          onClick={areYouSureHandler}
          whileHover={{
-            scale: 1.05,
             backgroundColor: areYouSure
-               ? darken(0.05, theme.red)
+               ? darken(0.05, theme.colors.red)
                : 'rgba(0, 0, 0, 0.1)',
          }}
          animate={{
             width: areYouSure ? '78px' : '24px',
-            backgroundColor: areYouSure ? theme.red : 'rgba(0, 0, 0, 0)',
-            color: areYouSure ? theme.white : color || theme.accent,
+            backgroundColor: areYouSure ? theme.colors.red : 'rgba(0, 0, 0, 0)',
+            color: areYouSure ? theme.colors.white : color || theme.colors.accent,
          }}
-         transition={spring}
          className={className}
       >
          <HiOutlineTrash size={16} color="inherit" />
@@ -65,8 +61,8 @@ const Wrapper = styled(motion.button)`
    transition: none;
    height: 24px;
    padding: 0;
-   font-family: ApercuPro, sans-serif;
-   font-size: 12px;
+   font-family: ${({ theme }) => theme.font.families.sans};
+   font-size: ${({ theme }) => theme.font.sizes.tiny};
    border-radius: 100px;
    text-transform: uppercase;
    gap: 4px;

@@ -1,11 +1,25 @@
+export * from './values/colors';
+
 import { useAtom } from 'jotai';
-import { useEffect, ReactNode } from 'react';
+import { useEffect, ReactElement } from 'react';
 import { ThemeProvider as SCThemeProvider } from 'styled-components';
 
 import { darkModeAtom } from '~/atoms/darkMode';
-import { theme } from '~/constants/colors';
+import { palletes } from './values/palletes';
+import { font } from './values/font';
+import { animation } from './values/animation';
 
-const ThemeProvider = ({ children }: { children: ReactNode }) => {
+export const theme = (colorTheme: keyof typeof palletes = 'light') => {
+   return {
+      font,
+      animation,
+      colors: palletes[colorTheme],
+   };
+};
+
+export type Theme = ReturnType<typeof theme>;
+
+const ThemeProvider = ({ children }: { children: ReactElement }) => {
    const [darkMode, toggleDarkMode] = useAtom(darkModeAtom);
 
    const resetPrefersDark = (e: any) => {
@@ -28,7 +42,7 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
    }, []);
 
    return (
-      <SCThemeProvider theme={theme[darkMode ? 'dark' : 'light']}>
+      <SCThemeProvider theme={theme(darkMode ? 'dark' : 'light')}>
          {children}
       </SCThemeProvider>
    );

@@ -15,7 +15,6 @@ specifiers:
   polished: ^4.2.2
   prop-types: ^15.8.1
   react: ^18.2.0
-  react-autowidth-input: ^1.0.5
   react-dom: ^18.2.0
   react-icons: ^4.4.0
   react-router-dom: ^6.3.0
@@ -32,7 +31,6 @@ dependencies:
   optics-ts: 2.3.0
   polished: 4.2.2
   react: 18.2.0
-  react-autowidth-input: 1.0.5_biqbaboplfbrettd7655fr4n2y
   react-dom: 18.2.0_react@18.2.0
   react-icons: 4.4.0_react@18.2.0
   react-router-dom: 6.3.0_biqbaboplfbrettd7655fr4n2y
@@ -1077,16 +1075,6 @@ packages:
       object-assign: 4.1.1
       react-is: 16.13.1
     dev: true
-
-  /react-autowidth-input/1.0.5_biqbaboplfbrettd7655fr4n2y:
-    resolution: {integrity: sha512-yspazqWt8nJfw40+sYUs76cyoBIvjZMTNWt/JZ2KCAhugD7gqifUv1FwY/1M+tTuqvlF1EUg4eTf6LveVJduvw==}
-    peerDependencies:
-      react: ^17.0.1
-      react-dom: ^17.0.1
-    dependencies:
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
-    dev: false
 
   /react-dom/18.2.0_react@18.2.0:
     resolution: {integrity: sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==}

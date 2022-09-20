@@ -1,0 +1,20 @@
+@font-face {
+  font-family: Recoleta;
+  src: url('/fonts/Recoleta/Recoleta-Regular.ttf') format('truetype');
+  font-weight: 400;
+}
+@font-face {
+font-family: Recoleta;
+  src: url('/fonts/Recoleta/Recoleta-Medium.ttf') format('truetype');
+  font-weight: 500;
+}
+@font-face {
+  font-family: ApercuPro;
+  src: url('/fonts/Apercu-Pro/Apercu-Pro-Regular.otf') format('opentype');
+  font-weight: 400;
+}
+@font-face {
+  font-family: ApercuPro;
+  src: url('/fonts/Apercu-Pro/Apercu-Pro-Medium.otf') format('opentype');
+  font-weight: 500;
+}

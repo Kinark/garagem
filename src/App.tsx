@@ -1,24 +1,36 @@
-import { createGlobalStyle } from 'styled-components';
-import { Routes, Route } from 'react-router-dom';
-
+import { createGlobalStyle, useTheme } from 'styled-components';
 import Dim from '~/components/Dim';
+import Routes from '~/Routes';
+import { BrowserRouter } from 'react-router-dom';
+import { Provider as JotaiProvider } from 'jotai';
+import { MotionConfig } from 'framer-motion';
 
-import Home from '~/pages/Home';
-import Edit from '~/pages/Edit';
+import ThemeProvider from '~/components/ThemeProvider';
+import '~/components/fontsLoader.css';
+import React from 'react';
+
+const MotionConfigProxy = ({ children }: { children: React.ReactElement }) => {
+   const theme = useTheme();
+   return (
+      <MotionConfig transition={theme.animation.springs.default}>
+         {children}
+      </MotionConfig>
+   );
+};
 
 function App() {
    return (
-      <>
-         <GlobalStyle />
-         <Routes>
-            <Route path="/" element={<Home />}>
-               <Route path="car">
-                  <Route path=":id" element={<Edit />} />
-               </Route>
-            </Route>
-         </Routes>
-         <Dim />
-      </>
+      <JotaiProvider>
+         <ThemeProvider>
+            <MotionConfigProxy>
+               <BrowserRouter>
+                  <GlobalStyle />
+                  <Routes />
+                  <Dim />
+               </BrowserRouter>
+            </MotionConfigProxy>
+         </ThemeProvider>
+      </JotaiProvider>
    );
 }
 
@@ -35,26 +47,6 @@ input::-webkit-inner-spin-button {
 input[type=number] {
     -moz-appearance:textfield; /* Firefox */
 }
-    @font-face {
-        font-family: Recoleta;
-        src: url('/fonts/Recoleta/Recoleta-Regular.ttf') format('truetype');
-        font-weight: 400;
-    }
-    @font-face {
-      font-family: Recoleta;
-        src: url('/fonts/Recoleta/Recoleta-Medium.ttf') format('truetype');
-        font-weight: 500;
-    }
-    @font-face {
-        font-family: ApercuPro;
-        src: url('/fonts/Apercu-Pro/Apercu-Pro-Regular.otf') format('opentype');
-        font-weight: 400;
-    }
-    @font-face {
-        font-family: ApercuPro;
-        src: url('/fonts/Apercu-Pro/Apercu-Pro-Medium.otf') format('opentype');
-        font-weight: 500;
-    }
     a {
       text-decoration: none;
       color: inherit;
@@ -64,9 +56,9 @@ input[type=number] {
       box-sizing: border-box;
    }
     body {
-      font-family: ApercuPro, Arial, Helvetica, sans-serif;
+      font-family: ${({ theme }) => theme.font.families.sans};
       margin: 0;
-      background: ${({ theme }) => theme.bg};
-      color: ${({ theme }) => theme.body};
+      background: ${({ theme }) => theme.colors.bg};
+      color: ${({ theme }) => theme.colors.body};
     }
 `;
