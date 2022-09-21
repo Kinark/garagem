@@ -1,6 +1,8 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@react-types/shared': ^3.14.1
+  '@types/lodash': ^4.14.185
   '@types/node': ^18.7.16
   '@types/react': ^18.0.17
   '@types/react-dom': ^18.0.6
@@ -39,6 +41,8 @@ dependencies:
   styled-components: 5.3.5_biqbaboplfbrettd7655fr4n2y
 
 devDependencies:
+  '@react-types/shared': 3.14.1_react@18.2.0
+  '@types/lodash': 4.14.185
   '@types/node': 18.7.16
   '@types/react': 18.0.18
   '@types/react-dom': 18.0.6
@@ -448,11 +452,23 @@ packages:
       tslib: 2.4.0
     dev: false
 
+  /@react-types/shared/3.14.1_react@18.2.0:
+    resolution: {integrity: sha512-yPPgVRWWanXqbdxFTgJmVwx0JlcnEK3dqkKDIbVk6mxAHvEESI9+oDnHvO8IMHqF+GbrTCzVtAs0zwhYI/uHJA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
+    dependencies:
+      react: 18.2.0
+    dev: true
+
   /@types/hoist-non-react-statics/3.3.1:
     resolution: {integrity: sha512-iMIqiko6ooLrTh1joXodJK5X9xeEALT1kM5G3ZLhD3hszxBdIEd5C75U834D9mLcINgD4OyZf5uQXjkuYydWvA==}
     dependencies:
       '@types/react': 18.0.18
       hoist-non-react-statics: 3.3.2
+    dev: true
+
+  /@types/lodash/4.14.185:
+    resolution: {integrity: sha512-evMDG1bC4rgQg4ku9tKpuMh5iBNEwNa3tf9zRHdP1qlv+1WUg44xat4IxCE14gIpZRGUUWAx2VhItCZc25NfMA==}
     dev: true
 
   /@types/node/18.7.16:
@@ -1144,7 +1160,6 @@ packages:
     engines: {node: '>=0.10.0'}
     dependencies:
       loose-envify: 1.4.0
-    dev: false
 
   /regenerator-runtime/0.13.9:
     resolution: {integrity: sha512-p3VT+cOEgxFsRRA9X4lkI1E+k2/CtnKtU4gcxyaCUreilL/vqI6CdZ3wxVUx3UOUg+gnUOQQcRI7BmSI656MYA==}

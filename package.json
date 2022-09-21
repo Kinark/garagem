@@ -24,6 +24,8 @@
     "styled-components": "^5.3.5"
   },
   "devDependencies": {
+    "@react-types/shared": "^3.14.1",
+    "@types/lodash": "^4.14.185",
     "@types/node": "^18.7.16",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
