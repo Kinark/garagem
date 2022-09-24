@@ -1,7 +1,7 @@
-import { useRef, useEffect } from 'react';
-import styled, { css, DefaultTheme, useTheme } from 'styled-components';
+import { useRef, useEffect, useState } from 'react';
+import styled, { css } from 'styled-components';
 import { useLocation } from 'react-router-dom';
-import { motion, LayoutProps } from 'framer-motion';
+import { motion, LayoutProps, Variants, useMotionValue } from 'framer-motion';
 import { PrimitiveAtom, useAtom } from 'jotai';
 import Lottie from 'lottie-react';
 import { opacify } from 'polished';
@@ -24,6 +24,48 @@ export const BRAND_LINE_HEIGHT = 19;
 const cardBasePaddingAmount =
    (CARDS_BASE_HEIGHT - TITLE_LINE_HEIGHT - BRAND_LINE_HEIGHT) / 2;
 
+const cardVariants: Variants = {
+   collapsed: {
+      paddingTop: `${cardBasePaddingAmount}px`,
+      paddingBottom: `${cardBasePaddingAmount}px`,
+   },
+   expanded: {
+      paddingTop: '48px',
+      paddingBottom: '40px',
+      scale: 1.05,
+   },
+   shrunk: {
+      scale: 0.8,
+   },
+   hidden: {
+      opacity: 0,
+      scale: 0.8,
+   },
+};
+
+const iconVariants: Variants = {
+   collapsed: (side: 'top' | 'bottom') => ({
+      opacity: 0,
+      y: side === 'top' ? 20 : -13,
+      // transition: {
+      //    when: 'beforeChildren',
+      // },
+   }),
+   expanded: {
+      opacity: 1,
+      y: 0,
+   },
+};
+
+const iconBgCircleVariants: Variants = {
+   collapsed: {
+      scale: 0,
+   },
+   expanded: {
+      scale: 1,
+   },
+};
+
 // Fake 🥸 custom hook to get animation ids
 export const useAnimationIds = (id: string, layoutDependency?: any) => {
    // const theme = useTheme();
@@ -32,16 +74,15 @@ export const useAnimationIds = (id: string, layoutDependency?: any) => {
       layout: LayoutProps['layout'] = true,
    ) => ({
       layout,
-      layoutId,
-      // transition: theme.animation.springs.default,
+      layoutId: `${layoutId}-${id}`,
       layoutDependency,
    });
    return {
-      card: propsBuilder(`carCard-${id}`),
-      model: propsBuilder(`carName-${id}`, 'position'),
-      content: propsBuilder(`carContent-${id}`),
-      brand: propsBuilder(`carBrand-${id}`, 'position'),
-      power: propsBuilder(`carPower-${id}`, 'position'),
+      card: propsBuilder(`carCard`),
+      model: propsBuilder(`carName`, 'position'),
+      content: propsBuilder(`carContent`),
+      brand: propsBuilder(`carBrand`, 'position'),
+      power: propsBuilder(`carPower`, 'position'),
    };
 };
 
@@ -51,6 +92,7 @@ const CarCard = ({ carAtom, removeCar }: CarCardProps) => {
    const width = useRef(0);
    const cardRef = useRef<HTMLDivElement>(null);
    const animationIds = useAnimationIds(car.id);
+   const [floating, setFloating] = useState(false)
 
    const updateWidth = () => {
       if (!cardRef.current) return;
@@ -78,24 +120,17 @@ const CarCard = ({ carAtom, removeCar }: CarCardProps) => {
          {!hide && (
             <GoodLink to={`/car/${car.id}`}>
                <Wrapper
-                  whileHover={{
-                     paddingTop: '48px',
-                     paddingBottom: '40px',
-                     scale: 1.05,
-                  }}
-                  whileTap={{ scale: 0.95 }}
-                  exit={{
-                     scale: 0.8,
-                     opacity: 0,
-                  }}
-                  style={{
-                     paddingTop: `${cardBasePaddingAmount}px`,
-                     paddingBottom: `${cardBasePaddingAmount}px`,
-                  }}
+                  initial="collapsed"
+                  whileHover="expanded"
+                  whileTap="shrunk"
+                  exit="hidden"
+                  style={{ zIndex: floating ? 4 : 0 }}
+                  variants={cardVariants}
                   ref={cardRef}
                   {...animationIds.card}
                >
-                  <KeyWrapper>
+                  <KeyWrapper custom="top" variants={iconVariants}>
+                     <BackCircle variants={iconBgCircleVariants} />
                      <KeyIcon animationData={keyLottie} loop={true} />
                   </KeyWrapper>
                   <Content {...animationIds.content}>
@@ -104,8 +139,8 @@ const CarCard = ({ carAtom, removeCar }: CarCardProps) => {
                         {car.brand}
                      </motion.span>
                   </Content>
-                  <TrashWrapper>
-                     <TrashIcon onDelete={removeCar} />
+                  <TrashWrapper custom="bottom" variants={iconVariants}>
+                     <ConfirmDelete onDelete={removeCar} />
                   </TrashWrapper>
                </Wrapper>
             </GoodLink>
@@ -129,47 +164,35 @@ const iconBase = css`
    right: 0;
    left: 0;
    margin: auto;
-   opacity: 0;
-   transition-property: opacity, transform;
-   transition-timing-function: cubic-bezier(0.33, 1, 0.68, 1);
-   transition-duration: 0.2s, 0.5s;
-   transition-delay: 0;
 `;
 
-const TrashWrapper = styled.div`
+const TrashWrapper = styled(motion.div)`
    ${iconBase};
    width: min-content;
    bottom: 12px;
-   transform: translateY(-13px);
 `;
 
-const TrashIcon = styled(ConfirmDelete)``;
-
-const KeyWrapper = styled.div`
+const KeyWrapper = styled(motion.div)`
    ${iconBase};
    top: 4px;
-   transform: translateY(20px);
    width: min-content;
-   &::after {
-      z-index: 0;
-      height: 55%;
-      width: 55%;
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      margin: auto;
-      border-radius: 50%;
-      transform: scale(0);
-      opacity: 0.5;
-      background: ${({ theme }) => theme.colors.bg};
-      transition-property: transform;
-      transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
-      transition-duration: 0.2s;
-      transition-delay: 0;
-   }
+`;
+
+const BackCircle = styled(motion.div)`
+   z-index: 0;
+   height: 55%;
+   width: 55%;
+   content: '';
+   position: absolute;
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: 0;
+   margin: auto;
+   border-radius: 50%;
+   transform: scale(0);
+   opacity: 0.5;
+   background: ${({ theme }) => theme.colors.bg};
 `;
 
 const KeyIcon = styled(Lottie)`
@@ -212,7 +235,12 @@ export const Wrapper = styled(motion.div)`
    box-shadow: rgba(17, 12, 46, 0) 0px 0px 0px 0px;
    text-align: center;
    position: relative;
-   transition: box-shadow 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+   transition-property: box-shadow, z-index;
+   transition-duration: 0.5s, 0s;
+   transition-delay: 0s, 0.3s;
+   transition-timing-function: ${({ theme }) =>
+      theme.animation.easings.default};
+   z-index: 0;
    overflow: hidden;
    border: solid 1.5px ${({ theme }) => opacify(-1, theme.colors.white)};
    &::before {
@@ -231,14 +259,17 @@ export const Wrapper = styled(motion.div)`
       bottom: 0;
       width: 100%;
       height: 100%;
-      transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition-timing-function: ${({ theme }) =>
+         theme.animation.easings.default};
       transition-duration: 0.2s;
       transition-delay: 0;
    }
    &:hover {
+      transition-delay: 0s;
+      z-index: 1 !important;
       border: solid 1.5px ${({ theme }) => opacify(-0.7, theme.colors.white)};
       box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
-      ${TrashWrapper}, ${KeyWrapper} {
+      /* ${TrashWrapper}, ${KeyWrapper} {
          transform: translateY(0);
          opacity: 1;
          transition-delay: 0.2s;
@@ -252,7 +283,7 @@ export const Wrapper = styled(motion.div)`
             transition-delay: 0.4s;
             transition-duration: 0.6s;
          }
-      }
+      } */
       &::before {
          opacity: 0.3;
       }
